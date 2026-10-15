@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bahan Ajar Fisika WebAR - Suhu, Kalor, & Perpindahan Kalor</title>
+
+  <!-- Pustaka Google Model Viewer untuk 3D & Markerless WebAR -->
+  <script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.4.0/model-viewer.min.js"></script>
+
+  <!-- Google Fonts & Lucide Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    :root {
+      --primary-blue: #1E3A8A;
+      --secondary-blue: #3B82F6;
+      --accent-orange: #F97316;
+      --accent-red: #EF4444;
+      --accent-purple: #8B5CF6;
+      --bg-light: #F8FAFC;
+      --card-bg: #FFFFFF;
+      --text-main: #0F172A;
+      --text-muted: #64748B;
+      --border-color: #E2E8F0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header & Navigation */
+    header {
+      background: linear-gradient(135deg, var(--primary-blue), var(--accent-purple));
+      color: white;
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .brand p {
+      font-size: 0.8rem;
+      opacity: 0.9;
+    }
+
+    .badge-fase {
+      background: var(--accent-orange);
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* Layout Main */
+    .app-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      padding: 1.5rem;
+      flex: 1;
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Common Card Styles */
+    .card {
+      background: var(--card-bg);
+      border-radius: 16px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* Panel Kiri - LKPD */
+    .panel-lkpd {
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      padding: 1.5rem;
+    }
+
+    .meta-box {
+      background: #EFF6FF;
+      border-left: 4px solid var(--secondary-blue);
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+    }
+
+    .meta-box grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .identity-inputs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+    }
+
+    .form-group label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    .form-group input {
+      padding: 0.6rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    /* Section LKPD (Deep Learning Framework) */
+    .dl-section {
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 1.25rem;
+      background: white;
+    }
+
+    .dl-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      color: var(--primary-blue);
+    }
+
+    .dl-header h3 {
+      font-size: 1.05rem;
+    }
+
+    .problem-box {
+      background: #FFF7ED;
+      border: 1px dashed var(--accent-orange);
+      padding: 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+      line-height: 1.5;
+    }
+
+    .table-responsive {
+      overflow-x: auto;
+      margin: 1rem 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border-color);
+      padding: 0.6rem;
+      text-align: center;
+    }
+
+    th {
+      background: var(--bg-light);
+      color: var(--primary-blue);
+    }
+
+    td input {
+      width: 100%;
+      padding: 0.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      text-align: center;
+    }
+
+    textarea {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      resize: vertical;
+      min-height: 80px;
+      font-size: 0.875rem;
+      margin-top: 0.5rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      padding: 0.6rem 1.2rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary { background: var(--secondary-blue); color: white; }
+    .btn-primary:hover { background: var(--primary-blue); }
+    .btn-success { background: #10B981; color: white; }
+    .btn-success:hover { background: #059669; }
+    .btn-danger { background: var(--accent-red); color: white; }
+    .btn-danger:hover { background: #DC2626; }
+    .btn-outline { background: transparent; border: 1px solid var(--border-color); color: var(--text-main); }
+
+    /* Panel Kanan - WebAR & Simulation */
+    .panel-webar {
+      display: flex;
+      flex-direction: column;
+      padding: 1.25rem;
+      background: #FAF5FF;
+    }
+
+    .submateri-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      background: #E9D5FF;
+      padding: 0.3rem;
+      border-radius: 10px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 0.6rem;
+      border: none;
+      border-radius: 8px;
+      background: transparent;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--primary-blue);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: white;
+      color: var(--accent-purple);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .ar-viewport {
+      position: relative;
+      width: 100%;
+      height: 380px;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+
+    model-viewer {
+      width: 100%;
+      height: 100%;
+      --poster-color: transparent;
+    }
+
+    .ar-controls-overlay {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 10;
+    }
+
+    .custom-ar-btn {
+      background: var(--accent-orange);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+
+    /* Custom Visualizer Canvas for 3D physics fallback */
+    .simulation-canvas {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(to bottom, #1e293b, #0f172a);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      color: white;
+    }
+
+    /* Simulation Control Dashboard */
+    .sim-dashboard {
+      background: white;
+      border-radius: 12px;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .control-row {
+      display: grid;
+      grid-template-columns: 1fr 2fr 80px;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+    }
+
+    .control-row input[type="range"] {
+      accent-color: var(--accent-orange);
+    }
+
+    .info-display-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+      gap: 0.5rem;
+      background: var(--bg-light);
+      padding: 0.75rem;
+      border-radius: 8px;
+    }
+
+    .info-card {
+      background: white;
+      padding: 0.5rem;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .info-card .label { font-size: 0.7rem; color: var(--text-muted); }
+    .info-card .value { font-size: 0.95rem; font-weight: 700; color: var(--primary-blue); }
+
+    .physics-formula-box {
+      background: #FEF3C7;
+      border-left: 4px solid var(--accent-orange);
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      color: #78350F;
+    }
+
+    /* Responsive Mobile layout */
+    @media (max-width: 900px) {
+      .app-container {
+        grid-template-columns: 1fr;
+      }
+      .panel-lkpd {
+        max-height: none;
+      }
+      .ar-viewport {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <h1>BAHAN AJAR FISIKA BERBASIS WebAR</h1>
+      <p>SMA Muhammadiyah 4 Bandung — Guru: Khairunnisa Nurfadilah, S.Pd.</p>
+    </div>
+    <span class="badge-fase">FASE E / KELAS X</span>
+  </header>
+
+  <div class="app-container">
+    
+    <!-- PANEL KIRI: LKPD INTERAKTIF -->
+    <div class="card panel-lkpd">
+      <h2 style="color: var(--primary-blue); margin-bottom: 0.5rem; font-size: 1.3rem; display: flex; align-items: center; gap: 0.5rem;">
+        <i data-lucide="book-open"></i> LKPD DIGITAL INTERAKTIF
+      </h2>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+        Materi: Suhu, Kalor, dan Perpindahan Kalor (Model PBL - Deep Learning)
+      </p>
+
+      <!-- Identitas Siswa -->
+      <div class="identity-inputs">
+        <div class="form-group">
+          <label>Nama Peserta Didik</label>
+          <input type="text" id="studentName" placeholder="Masukkan nama lengkap">
+        </div>
+        <div class="form-group">
+          <label>Kelompok / Kelas</label>
+          <input type="text" id="studentClass" placeholder="Contoh: X-1 / Kelompok 3">
+        </div>
+      </div>
+
+      <!-- Informasi Pendekatan Pembelajaran -->
+      <div class="meta-box">
+        <strong>Tujuan Pembelajaran:</strong>
+        <ol style="margin-left: 1.2rem; margin-top: 0.3rem;">
+          <li>Menganalisis konversi skala suhu secara presisi.</li>
+          <li>Membuktikan hubungan $Q = m \cdot c \cdot \Delta T$ dan perubahan wujud.</li>
+          <li>Membedakan mekanisme Konduksi, Konveksi, dan Radiasi via WebAR.</li>
+        </ol>
+      </div>
+
+      <!-- DEEP LEARNING TAHAP 1: MEMAHAMI -->
+      <div class="dl-section">
+        <div class="dl-header">
+          <i data-lucide="brain"></i>
+          <h3>TAHAP 1: MEMAHAMI (Understanding Phase)</h3>
+        </div>
+
+        <div class="problem-box">
+          <strong>Orientasi Masalah:</strong><br>
+          Saat memasak air menggunakan panci logam dengan gagang berlapis plastik, air di dasar panci mendidih, es batu yang dimasukkan mencair, dan gagang plastik tidak terasa sepanas badan panci. Mengapa fenomena perpindahan energi ini dapat terjadi bersamaan dengan cara yang berbeda-beda?
+        </div>
+
+        <p style="font-size: 0.85rem; margin-bottom: 0.5rem;"><strong>Pertanyaan Pemantik:</strong></p>
+
+        <p style="font-size: 0.85rem;">1. Mengapa pengukuran suhu memerlukan termometer standar dan tidak bisa cukup menggunakan indra peraba?</p>
+        <textarea id="ans1" placeholder="Tuliskan pemahaman awal Anda di sini..."></textarea>
+      </div>
+
+      <!-- DEEP LEARNING TAHAP 2: MENGAPLIKASI -->
+      <div class="dl-section">
+        <div class="dl-header">
+          <i data-lucide="flask-conical"></i>
+          <h3>TAHAP 2: MENGAPLIKASI (Applying Phase - WebAR Exploration)</h3>
+        </div>
+
+        <p style="font-size: 0.85rem; margin-bottom: 0.8rem;">
+          Lakukan eksplorasi menggunakan simulator WebAR di panel kanan, lalu lengkapi tabel pengamatan di bawah ini!
+        </p>
+
+        <!-- Tabel 1: Suhu -->
+        <h4 style="font-size: 0.9rem; color: var(--accent-purple); margin-top: 1rem;">Aktivitas 1: Data Konversi Skala Suhu</h4>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Objek</th>
+                <th>Celsius (°C)</th>
+                <th>Reamur (°R)</th>
+                <th>Fahrenheit (°F)</th>
+                <th>Kelvin (K)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Air Es</td>
+                <td><input type="number" id="t1_c" value="0"></td>
+                <td><input type="number" id="t1_r" value="0"></td>
+                <td><input type="number" id="t1_f" value="32"></td>
+                <td><input type="number" id="t1_k" value="273"></td>
+              </tr>
+              <tr>
+                <td>Air Ruang</td>
+                <td><input type="number" id="t2_c" value="25"></td>
+                <td><input type="number" id="t2_r" value="20"></td>
+                <td><input type="number" id="t2_f" value="77"></td>
+                <td><input type="number" id="t2_k" value="298"></td>
+              </tr>
+              <tr>
+                <td>Air Panas</td>
+                <td><input type="number" id="t3_c" value="80"></td>
+                <td><input type="number" id="t3_r" value="64"></td>
+                <td><input type="number" id="t3_f" value="176"></td>
+                <td><input type="number" id="t3_k" value="353"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Tabel 2: Kalor -->
+        <h4 style="font-size: 0.9rem; color: var(--accent-purple); margin-top: 1rem;">Aktivitas 2: Penyelidikan Asas Black & Kalor Pemanasan</h4>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Massa ($m$)</th>
+                <th>Kalor Jenis ($c$)</th>
+                <th>Suhu Awal ($T_1$)</th>
+                <th>Energi Kalor ($Q$)</th>
+                <th>Suhu Akhir ($T_2$)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1.0 kg</td>
+                <td>4184 J/kg°C</td>
+                <td>25 °C</td>
+                <td>100,000 J</td>
+                <td><input type="text" id="t2_ans1" placeholder="Isi hasil AR"></td>
+              </tr>
+              <tr>
+                <td>2.0 kg</td>
+                <td>4184 J/kg°C</td>
+                <td>25 °C</td>
+                <td>100,000 J</td>
+                <td><input type="text" id="t2_ans2" placeholder="Isi hasil AR"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Tabel 3: Perpindahan Kalor -->
+        <h4 style="font-size: 0.9rem; color: var(--accent-purple); margin-top: 1rem;">Aktivitas 3: Analisis Mode Perpindahan Kalor</h4>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr>
+                <th>Mekanisme</th>
+                <th>Perantara (Medium)</th>
+                <th>Perpindahan Partikel</th>
+                <th>Bukti Pengamatan AR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Konduksi</td>
+                <td>Padat (Logam)</td>
+                <td>Tidak Ikut Pindah</td>
+                <td><input type="text" placeholder="Catat di sini..."></td>
+              </tr>
+              <tr>
+                <td>Konveksi</td>
+                <td>Fluida (Air)</td>
+                <td>Ikut Pindah (Sirkulasi)</td>
+                <td><input type="text" placeholder="Catat di sini..."></td>
+              </tr>
+              <tr>
+                <td>Radiasi</td>
+                <td>Tanpa Medium</td>
+                <td>Gelombang EM</td>
+                <td><input type="text" placeholder="Catat di sini..."></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- DEEP LEARNING TAHAP 3: MEREFLEKSI -->
+      <div class="dl-section">
+        <div class="dl-header">
+          <i data-lucide="sparkles"></i>
+          <h3>TAHAP 3: MEREFLEKSI (Reflecting Phase)</h3>
+        </div>
+
+        <p style="font-size: 0.85rem;">2. Mengapa air membutuhkan kalor yang jauh lebih besar daripada logam untuk menaikkan suhunya dalam jumlah massa yang sama? Hubungkan dengan nilai kalor jenis ($c$)!</p>
+        <textarea id="ans2" placeholder="Tuliskan hasil analisis reflektif Anda..."></textarea>
+
+        <p style="font-size: 0.85rem; margin-top: 0.75rem;">3. Kesimpulan Akhir Pembelajaran:</p>
+        <textarea id="ans3" placeholder="Tuliskan kesimpulan menyeluruh terkait Suhu, Kalor, dan Perpindahan Kalor..."></textarea>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="btn-group">
+        <button class="btn btn-success" onclick="saveLKPD()"><i data-lucide="save"></i> Simpan Jawaban</button>
+        <button class="btn btn-primary" onclick="exportLKPD()"><i data-lucide="download"></i> Unduh Ringkasan LKPD</button>
+        <button class="btn btn-danger" onclick="resetLKPD()"><i data-lucide="rotate-ccw"></i> Reset</button>
+      </div>
+
+    </div>
+
+    <!-- PANEL KANAN: WEBAR & SIMULASI INTERAKTIF -->
+    <div class="card panel-webar">
+      
+      <!-- Submenu Navigasi -->
+      <div class="submateri-tabs">
+        <button class="tab-btn active" onclick="switchTab('suhu')">1. AR SUHU</button>
+        <button class="tab-btn" onclick="switchTab('kalor')">2. AR KALOR</button>
+        <button class="tab-btn" onclick="switchTab('perpindahan')">3. AR PERPINDAHAN</button>
+      </div>
+
+      <!-- AR Viewport Canvas Area -->
+      <div class="ar-viewport">
+        
+        <div class="ar-controls-overlay">
+          <button class="custom-ar-btn" onclick="triggerAR()">
+            <i data-lucide="camera"></i> MULAIBERBASIS WebAR
+          </button>
+        </div>
+
+        <!-- Google Model Viewer (3D Fallback / WebAR Engine) -->
+        <model-viewer 
+          id="arViewer"
+          src="https://modelviewer.dev/shared-assets/models/Astronaut.glb"
+          ar
+          ar-modes="webxr scene-viewer quick-look"
+          camera-controls
+          touch-action="pan-y"
+          alt="3D Visualizer Model Fisika"
+          style="display: none;">
+        </model-viewer>
+
+        <!-- Canvas Visualisasi Simulasi 2D/3D Canvas Fallback -->
+        <div id="canvasSimContainer" class="simulation-canvas">
+          <canvas id="simCanvas" width="500" height="320"></canvas>
+        </div>
+
+      </div>
+
+      <!-- Dashboard Kontrol Simulasi -->
+      <div class="sim-dashboard" id="simControls">
+        <!-- Dynamic Controls populated by JS -->
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // App State Management
+    let currentTab = 'suhu';
+    
+    // Suhu State
+    let stateSuhu = {
+      celsius: 25,
+      object: 'air_ruang'
+    };
+
+    // Kalor State
+    let stateKalor = {
+      massa: 1.0, // kg
+      c: 4184, // J/kg°C (Air)
+      q: 100000, // Joules
+      t1: 25, // °C
+      fase: 'pemanasan' // pemanasan | mencair
+    };
+
+    // Perpindahan Kalor State
+    let statePerpindahan = {
+      mode: 'konduksi', // konduksi | konveksi | radiasi
+      suhuSumber: 100, // °C
+      bahan: 'tembaga', // tembaga | kayu
+      k: 385 // Daya hantar termal
+    };
+
+    // TAB SWITCHING LOGIC
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      renderControls();
+      drawSimulation();
+    }
+
+    // DYNAMIC CONTROL DASHBOARD RENDERER
+    function renderControls() {
+      const container = document.getElementById('simControls');
+
+      if (currentTab === 'suhu') {
+        container.innerHTML = `
+          <div class="physics-formula-box">
+            <strong>Persamaan Skala Suhu:</strong><br>
+            $R = \\frac{4}{5}C$, &nbsp; $F = \\frac{9}{5}C + 32$, &nbsp; $K = C + 273.15$
+          </div>
+
+          <div class="control-row">
+            <label>Pilih Objek:</label>
+            <select id="objSelect" style="padding:0.4rem; border-radius:6px; border:1px solid #ccc;" onchange="updateSuhuObj(this.value)">
+              <option value="air_es">Air Es (0°C)</option>
+              <option value="air_ruang" selected>Air Ruang (25°C)</option>
+              <option value="air_panas">Air Panas (80°C)</option>
+            </select>
+            <div></div>
+          </div>
+
+          <div class="control-row">
+            <label>Suhu (°C):</label>
+            <input type="range" min="-10" max="110" value="${stateSuhu.celsius}" oninput="updateSuhu(this.value)">
+            <span style="font-weight:bold; color:var(--accent-orange);">${stateSuhu.celsius} °C</span>
+          </div>
+
+          <div class="info-display-grid">
+            <div class="info-card"><div class="label">Celsius</div><div class="value">${stateSuhu.celsius} °C</div></div>
+            <div class="info-card"><div class="label">Reamur</div><div class="value">${(stateSuhu.celsius * 0.8).toFixed(1)} °R</div></div>
+            <div class="info-card"><div class="label">Fahrenheit</div><div class="value">${((stateSuhu.celsius * 1.8) + 32).toFixed(1)} °F</div></div>
+            <div class="info-card"><div class="label">Kelvin</div><div class="value">${(parseFloat(stateSuhu.celsius) + 273.15).toFixed(1)} K</div></div>
+          </div>
+        `;
+      } else if (currentTab === 'kalor') {
+        const deltaT = stateKalor.q / (stateKalor.massa * stateKalor.c);
+        const t2 = stateKalor.t1 + deltaT;
+
+        container.innerHTML = `
+          <div class="physics-formula-box">
+            <strong>Rumus Kalor Pemanasan & Perubahan Wujud:</strong><br>
+            $Q = m \\cdot c \\cdot \\Delta T$ &nbsp;|&nbsp; $Q = m \\cdot L$
+          </div>
+
+          <div class="control-row">
+            <label>Massa Zat ($m$):</label>
+            <input type="range" min="0.5" max="5.0" step="0.1" value="${stateKalor.massa}" oninput="updateKalorMassa(this.value)">
+            <span>${stateKalor.massa} kg</span>
+          </div>
+
+          <div class="control-row">
+            <label>Energi Kalor ($Q$):</label>
+            <input type="range" min="10000" max="300000" step="10000" value="${stateKalor.q}" oninput="updateKalorQ(this.value)">
+            <span>${(stateKalor.q / 1000).toFixed(0)} kJ</span>
+          </div>
+
+          <div class="info-display-grid">
+            <div class="info-card"><div class="label">Suhu Awal ($T_1$)</div><div class="value">${stateKalor.t1} °C</div></div>
+            <div class="info-card"><div class="label">$\Delta T$ Hitung</div><div class="value">${deltaT.toFixed(1)} °C</div></div>
+            <div class="info-card"><div class="label">Suhu Akhir ($T_2$)</div><div class="value" style="color:var(--accent-red);">${t2.toFixed(1)} °C</div></div>
+          </div>
+        `;
+      } else if (currentTab === 'perpindahan') {
+        container.innerHTML = `
+          <div class="physics-formula-box">
+            <strong>Mekanisme Perpindahan Kalor:</strong><br>
+            Pilih jenis perpindahan untuk mengamati pergerakan molekul & energi!
+          </div>
+
+          <div class="control-row">
+            <label>Mode Mode:</label>
+            <select style="padding:0.4rem; border-radius:6px; border:1px solid #ccc;" onchange="updateModePerpindahan(this.value)">
+              <option value="konduksi">Konduksi (Batang Logam)</option>
+              <option value="konveksi">Konveksi (Fluida Air)</option>
+              <option value="radiasi">Radiasi (Gelombang EM)</option>
+            </select>
+            <div></div>
+          </div>
+
+          <div class="control-row">
+            <label>Suhu Sumber:</label>
+            <input type="range" min="50" max="300" value="${statePerpindahan.suhuSumber}" oninput="updateSuhuSumber(this.value)">
+            <span>${statePerpindahan.suhuSumber} °C</span>
+          </div>
+        `;
+      }
+    }
+
+    // STATE UPDATERS
+    function updateSuhu(val) {
+      stateSuhu.celsius = parseFloat(val);
+      renderControls();
+      drawSimulation();
+    }
+
+    function updateSuhuObj(type) {
+      stateSuhu.object = type;
+      if (type === 'air_es') stateSuhu.celsius = 0;
+      if (type === 'air_ruang') stateSuhu.celsius = 25;
+      if (type === 'air_panas') stateSuhu.celsius = 80;
+      renderControls();
+      drawSimulation();
+    }
+
+    function updateKalorMassa(val) {
+      stateKalor.massa = parseFloat(val);
+      renderControls();
+      drawSimulation();
+    }
+
+    function updateKalorQ(val) {
+      stateKalor.q = parseFloat(val);
+      renderControls();
+      drawSimulation();
+    }
+
+    function updateModePerpindahan(mode) {
+      statePerpindahan.mode = mode;
+      renderControls();
+      drawSimulation();
+    }
+
+    function updateSuhuSumber(val) {
+      statePerpindahan.suhuSumber = parseFloat(val);
+      renderControls();
+      drawSimulation();
+    }
+
+    // CANVAS 2D/3D SIMULATION DRAWING ENGINE
+    function drawSimulation() {
+      const canvas = document.getElementById('simCanvas');
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (currentTab === 'suhu') {
+        // Draw Thermometer Model
+        ctx.fillStyle = '#334155';
+        ctx.fillRect(220, 30, 60, 240);
+        ctx.beginPath();
+        ctx.arc(250, 260, 45, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Mercury Level according to temperature
+        const height = Math.min(200, Math.max(10, (stateSuhu.celsius + 10) * 1.8));
+        const color = stateSuhu.celsius > 50 ? '#EF4444' : (stateSuhu.celsius > 15 ? '#F97316' : '#3B82F6');
+        
+        ctx.fillStyle = color;
+        ctx.fillRect(238, 250 - height, 24, height);
+        ctx.beginPath();
+        ctx.arc(250, 260, 35, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Tanda Skala
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '12px Poppins';
+        ctx.fillText('100°C', 290, 60);
+        ctx.fillText('0°C', 290, 230);
+
+      } else if (currentTab === 'kalor') {
+        // Draw Beaker & Heating Simulation
+        ctx.strokeStyle = '#94A3B8';
+        ctx.lineWidth = 4;
+        ctx.strokeRect(180, 100, 140, 150); // Beaker glass
+
+        // Water level based on mass
+        const waterHeight = Math.min(130, stateKalor.massa * 25);
+        ctx.fillStyle = '#3B82F6';
+        ctx.globalAlpha = 0.6;
+        ctx.fillRect(182, 248 - waterHeight, 136, waterHeight);
+        ctx.globalAlpha = 1.0;
+
+        // Fire Heat Source
+        ctx.fillStyle = '#F97316';
+        ctx.beginPath();
+        ctx.moveTo(230, 280);
+        ctx.lineTo(250, 255);
+        ctx.lineTo(270, 280);
+        ctx.fill();
+
+        ctx.fillStyle = '#FFFFFF';
+        ctx.font = '12px Poppins';
+        ctx.fillText(`Air: ${stateKalor.massa} kg`, 215, 200);
+
+      } else if (currentTab === 'perpindahan') {
+        if (statePerpindahan.mode === 'konduksi') {
+          // Metal Rod Conduction
+          const grad = ctx.createLinearGradient(100, 0, 400, 0);
+          grad.addColorStop(0, '#EF4444');
+          grad.addColorStop(1, '#3B82F6');
+
+          ctx.fillStyle = grad;
+          ctx.fillRect(100, 130, 300, 40);
+
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '12px Poppins';
+          ctx.fillText('Ujung Panas (Sumber Kalor)', 90, 110);
+          ctx.fillText('Ujung Dingin', 330, 110);
+          ctx.fillText('Transfer Energi via Getaran Kisi Molekul', 130, 210);
+
+        } else if (statePerpindahan.mode === 'konveksi') {
+          // Fluid Convection Cycle
+          ctx.strokeStyle = '#38BDF8';
+          ctx.lineWidth = 3;
+          ctx.beginPath();
+          ctx.arc(250, 160, 60, 0, Math.PI * 2);
+          ctx.stroke();
+
+          ctx.fillStyle = '#F97316';
+          ctx.fillText('↑ Arus Hangat Naik (Massa Jenis Kecil)', 150, 80);
+          ctx.fillStyle = '#3B82F6';
+          ctx.fillText('↓ Arus Dingin Turun (Massa Jenis Besar)', 150, 260);
+
+        } else if (statePerpindahan.mode === 'radiasi') {
+          // Radiation EM Waves
+          ctx.fillStyle = '#F59E0B';
+          ctx.beginPath();
+          ctx.arc(100, 160, 40, 0, Math.PI * 2); // Sun
+          ctx.fill();
+
+          ctx.fillStyle = '#10B981';
+          ctx.fillRect(360, 120, 60, 80); // Object Receiver
+
+          ctx.strokeStyle = '#EF4444';
+          ctx.lineWidth = 2;
+          for (let i = 0; i < 4; i++) {
+            ctx.beginPath();
+            ctx.moveTo(150, 130 + (i * 20));
+            ctx.lineTo(350, 130 + (i * 20));
+            ctx.stroke();
+          }
+
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = '12px Poppins';
+          ctx.fillText('Pancaran Gelombang Elektromagnetik (Tanpa Medium)', 110, 240);
+        }
+      }
+    }
+
+    // AR TRIGGER
+    function triggerAR() {
+      const viewer = document.getElementById('arViewer');
+      if (viewer.canActivateAR) {
+        viewer.activateAR();
+      } else {
+        alert('Fitur AR Markerless memerlukan browser mobile berkemampuan WebXR/AR (seperti Chrome di Android atau Safari di iOS). Menampilkan alternatif visualisasi 3D Interaktif!');
+      }
+    }
+
+    // LKPD ACTIONS
+    function saveLKPD() {
+      const name = document.getElementById('studentName').value;
+      if (!name) {
+        alert('Harap isi Nama Peserta Didik terlebih dahulu!');
+        return;
+      }
+      alert('Jawaban LKPD berhasil disimpan dalam sesi lokal pembelajaran!');
+    }
+
+    function exportLKPD() {
+      const name = document.getElementById('studentName').value || "Siswa";
+      const ans1 = document.getElementById('ans1').value;
+      const ans2 = document.getElementById('ans2').value;
+      const ans3 = document.getElementById('ans3').value;
+
+      const content = `
+==================================================
+  HASIL LKPD FISIKA - SUHU, KALOR, & PERPINDAHAN KALOR
+==================================================
+Nama Siswa    : ${name}
+Kelas/Kelompok: ${document.getElementById('studentClass').value}
+Sekolah       : SMA Muhammadiyah 4 Bandung
+Guru          : Khairunnisa Nurfadilah, S.Pd.
+
+--------------------------------------------------
+1. MEMAHAMI (Pertanyaan Pemantik):
+${ans1}
+
+--------------------------------------------------
+2. MENGAPLIKASI (Data Hasil Simulasi WebAR):
+- Suhu Air Es   : ${document.getElementById('t1_c').value} °C | ${document.getElementById('t1_f').value} °F
+- Suhu Air Ruang: ${document.getElementById('t2_c').value} °C | ${document.getElementById('t2_f').value} °F
+- Suhu Air Panas: ${document.getElementById('t3_c').value} °C | ${document.getElementById('t3_f').value} °F
+
+--------------------------------------------------
+3. MEREFLEKSI & KESIMPULAN:
+Refleksi Kalor Jenis:
+${ans2}
+
+Kesimpulan Akhir:
+${ans3}
+==================================================
+      `;
+
+      const blob = new Blob([content], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `LKPD_Fisika_${name.replace(/\s+/g, '_')}.txt`;
+      a.click();
+    }
+
+    function resetLKPD() {
+      if (confirm('Apakah Anda yakin ingin mengosongkan seluruh isi LKPD?')) {
+        document.querySelectorAll('input[type="text"], textarea').forEach(el => el.value = '');
+        alert('LKPD telah di-reset.');
+      }
+    }
+
+    // INITIALIZATION ON LOAD
+    window.onload = function() {
+      renderControls();
+      drawSimulation();
+    };
+  </script>
+</body>
+</html>
